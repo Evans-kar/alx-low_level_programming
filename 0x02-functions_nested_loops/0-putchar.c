@@ -1,8 +1,7 @@
 #include "main.h"
 /**
- * main - prints robert to stdout
- *
- * Return: 0 if no error
+ * main - program that prints _putchar
+ * Return: 0 (success)
  */
 int main(void)
 {
