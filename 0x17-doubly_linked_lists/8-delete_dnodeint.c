@@ -1,55 +1,45 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "lists.h"
 
 /**
- * delete_dnodeint_at_index - Entry Point
- * Description: function that deletes the node at index index of a dlistint_t
- * @head: pointer to the list.
- * @index: position of the node to delete.
- * Return: 1 if it succeeded, -1 if it failed.
- **/
-
+ * delete_dnodeint_at_index - deletes node at given index
+ * @head: pointer to a pointer to first node
+ * @index: index of the node to delete
+ * Return: 1 if successful, otherwise -1
+ */
 int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 {
-	dlistint_t *current = *head;
-	dlistint_t *node_to_delete = *head;
-	unsigned int idx;
-	unsigned int count = 0;
+	dlistint_t *iter = NULL;
+	unsigned int idx = 0;
 
-	/* border case for empty list */
-	if (!(*head))
+	if (head == NULL || *head == NULL)
 		return (-1);
-
-	/* border case for delete at the beginning */
-	if (index == 0)
+	iter = *head;
+	if ((iter->next && iter->prev) || iter->prev)
 	{
-		*head = node_to_delete->next;
-		free(node_to_delete);
-		if (*head)
-			(*head)->prev = NULL;
-		return (1);
+		while (iter->prev)
+			iter = iter->prev;
 	}
-
-	/* search of position to delete */
-	idx = index - 1;
-	while (current && count != idx)
+	while (iter)
 	{
-		count++;
-		current = current->next;
+		if (index == idx)
+		{
+			if (iter->prev == NULL)
+			{
+				*head = iter->next;
+				if (*head)
+					(*head)->prev = NULL;
+			} else if (iter->next == NULL)
+				(iter->prev)->next = NULL;
+			else
+			{
+				(iter->next)->prev = iter->prev;
+				(iter->prev)->next = iter->next;
+			}
+			free(iter);
+			return (1);
+		}
+		idx++;
+		iter = iter->next;
 	}
-
-	/* general case */
-	if (count == idx && current)
-	{
-		node_to_delete = current->next;
-		if (node_to_delete->next)
-		node_to_delete->next->prev = current;
-		current->next = node_to_delete->next;
-		free(node_to_delete);
-		return (1);
-	}
-
 	return (-1);
 }

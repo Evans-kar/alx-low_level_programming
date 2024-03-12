@@ -1,25 +1,18 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "lists.h"
 
 /**
- * free_dlistint - Entry Point
- * Description: free list.
- * @head: pointer to the list.
- **/
+ * free_dlistint - Frees a linked list
+ * @head: The head of the list
+*/
 
 void free_dlistint(dlistint_t *head)
 {
-	dlistint_t *current = head;
+	dlistint_t *tmp;
 
-	while (current != NULL)
+	while (head)
 	{
-		dlistint_t *next = current->next;
-
-		free(current);
-		current = next;
+		tmp = head->next;
+		free(head);
+		head = tmp;
 	}
-
-	free(current);
 }
